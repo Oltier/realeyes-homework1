@@ -1,0 +1,30 @@
+{
+  "name": "realeyes-homework1",
+  "version": "1.0.0",
+  "description": "Currency exchange",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oltier/realeyes-homework1.git"
+  },
+  "author": "Zoltán Tudlik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Oltier/realeyes-homework1/issues"
+  },
+  "homepage": "https://github.com/Oltier/realeyes-homework1#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "bower": "^1.8.0",
+    "connect-flash": "^0.1.1",
+    "express": "^4.14.0",
+    "express-validator": "^3.1.2",
+    "hbs": "^4.0.1",
+    "nedb": "^1.8.0",
+    "rickshaw": "^1.6.0",
+    "xml2js": "^0.4.17"
+  }
+}

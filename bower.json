@@ -1,0 +1,23 @@
+{
+  "name": "realeyes-homework1",
+  "description": "Currency exchange",
+  "main": "server.js",
+  "authors": [
+    "Zoltán Tudlik"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Oltier/realeyes-homework1",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-validator": "^0.11.9",
+    "handlebars": "^4.0.5"
+  }
+}
