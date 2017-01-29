@@ -12,7 +12,6 @@ $("form").on('submit', function(e){
         cache: false,
         data: values,
         success: function(data) {
-            console.log('Success!')
             console.log(data)
         },
         error: function(jqXHR, textStatus, err) {

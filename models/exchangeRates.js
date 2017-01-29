@@ -6,16 +6,13 @@ module.exports ={
             type: 'string',
             required: true,
         },
-        exchangeRates: [{
-                currency: {
-                    type: 'string',
-                    required: true,
-                },
-                rate: {
-                    type: 'float',
-                    required: true,
-                }
-            }
-        ]
+        currency: {
+            type: 'string',
+            required: true,
+        },
+        rate: {
+            type: 'float',
+            required: true,
+        }
     }
 }

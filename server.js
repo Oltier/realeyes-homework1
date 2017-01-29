@@ -37,7 +37,7 @@ app.use(flash());
 
 
 var exchangeController = require("./controllers/exchange");
-app.use('/', exchangeController);
+//app.use('/', exchangeController);
 
 var port = process.env.PORT;
 var host = process.env.IP;
@@ -52,60 +52,68 @@ var http = require('http');
 
 var Datastore = require('nedb');
 
-var exchangeRatesDB = new Datastore({filename: require('./models/exchangeRates'), inMemoryOnly: true});
+app.exchangeRatesDB = new Datastore({
+    filename: './models/exchangeRates.db',
+    inMemoryOnly: true
+});
 var XMLPath = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
 
-var exchangeRates = [];
+app.get('/', function(req, res){
+    res.render('index');
+});
 
-var callback = function(res) {
-    res.on('error', function(err){
-        console.log("Error while reading", err);
-    });
-    
-    var concat = require('concat-stream');
-    
-    res.pipe(concat(function(buffer) {
-        var data = buffer.toString();
-        var filteredStr = data.slice(data.indexOf("<Cube>"), data.indexOf("</gesmes:Envelope"));
-        parser.parseString(filteredStr, function(err, result) {
-            if (err) {
-                console.log("Error while parsing.", err);
-            }
-            for(var i = 0; i < result.Cube.Cube.length; i++) {
-                var exchanges = [];
-                for(var j = 0; j < result.Cube.Cube[i].Cube.length; j++){
-                    exchanges.push(result.Cube.Cube[i].Cube[j]['$']);
+app.post('/', function(req, res){
+   var value = req.body.value;
+   var from = req.body.fromCurrency;
+   var to = req.body.toCurrency;
+   var rate = 0;
+   app.exchangeRatesDB.find({date: "2017-01-27", currency: from === "EUR" ? to : from}, function(err, docs) {
+        if(err) {
+            console.log("Error getting entry.", err);
+        }
+        
+        /*if(from === "EUR") {
+            var l = false;
+            for(var i = 0; i < docs.exchangeRates.length && !l; i++) {
+                if(docs.exchangeRates[i].currency === to) {
+                    rate = docs.exchangeRates[i].rate;
+                    l = true;
                 }
-                
-                exchangeRates.push({
-                    date: result.Cube.Cube[i]['$']['time'],
-                    exchangeRates: exchanges,
-                })
-                
-                exchangeRatesDB.insert({
-                    date: result.Cube.Cube[i]['$']['time'],
-                    exchangeRates: exchanges,
-                }, function(err, newDoc) {
-                    if(err) {
-                        console.log("Error inserting." + err);
-                    }
-                });
             }
-        });
-    }));
-    
-    /*res.on('end', function(){
-        exchangeRatesDB.find({}, function(err, docs) {
-            if(err) {
-                console.log("Error getting entry.", err);
-            }
+        }*/
+        
         console.log(JSON.stringify(docs,null,2));
-        });
-    })*/
-};
+        rate = docs[0].rate;
+    });
+    res.json(from === "EUR" ? value * rate : value / rate);
+});
 
-var req = http.request(XMLPath, callback).end();
+var RequestPromise = require('request-promise');
+RequestPromise(XMLPath)
+    .then(function(data){
+        
+       var filteredStr = data.slice(data.indexOf("<Cube>"), data.indexOf("</gesmes:Envelope"));
+       parser.parseString(filteredStr, function(err, result) {
+           if (err) {
+               console.log("Error while parsing.", err);
+           }
+           for(var i = 0; i < result.Cube.Cube.length; i++) {
+               var date = result.Cube.Cube[i]['$']['time'];
+               for(var j = 0; j < result.Cube.Cube[i].Cube.length; j++) {
+                   var exchangeRate = result.Cube.Cube[i].Cube[j]['$'];
+                   app.exchangeRatesDB.insert({
+                       date: date,
+                       rate: exchangeRate.rate,
+                       currency: exchangeRate.currency
+                   }, function(err, doc) {
+                       if(err) console.log("Error inserting: " + err);
+                   });
+               }
+           }
+       });
+    });
 
 var server = app.listen(port, host, function() {
+    app.models = 
     console.log('Server is started.');
 });
