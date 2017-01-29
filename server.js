@@ -50,39 +50,61 @@ parser.on('error', function(err) {
 });
 var http = require('http');
 
-var getExchangeRates = function() {
-    var XMLPath = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
-    var rawJSON = loadXMLDoc(XMLPath);
+var Datastore = require('nedb');
 
-    function loadXMLDoc(source) {
-        var json;
-        var data = "";
-        
-        http.get(source, function(res) {
-            res.on('error', function(err){
-                console.log("Error while reading", err);
-            });
-            
-            res.on('data', function(XMLdata){
-               data += XMLdata.toString(); 
-            });
-            
-            res.on('end', function() {
-                parser.parseString(data.substring(0, data.length), function(err, result) {
-                    if (err) {
-                        console.log("Error while parsing.", err);
+var exchangeRatesDB = new Datastore({filename: require('./models/exchangeRates'), inMemoryOnly: true});
+var XMLPath = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
+
+var exchangeRates = [];
+
+var callback = function(res) {
+    res.on('error', function(err){
+        console.log("Error while reading", err);
+    });
+    
+    var concat = require('concat-stream');
+    
+    res.pipe(concat(function(buffer) {
+        var data = buffer.toString();
+        var filteredStr = data.slice(data.indexOf("<Cube>"), data.indexOf("</gesmes:Envelope"));
+        parser.parseString(filteredStr, function(err, result) {
+            if (err) {
+                console.log("Error while parsing.", err);
+            }
+            for(var i = 0; i < result.Cube.Cube.length; i++) {
+                var exchanges = [];
+                for(var j = 0; j < result.Cube.Cube[i].Cube.length; j++){
+                    exchanges.push(result.Cube.Cube[i].Cube[j]['$']);
+                }
+                
+                exchangeRates.push({
+                    date: result.Cube.Cube[i]['$']['time'],
+                    exchangeRates: exchanges,
+                })
+                
+                exchangeRatesDB.insert({
+                    date: result.Cube.Cube[i]['$']['time'],
+                    exchangeRates: exchanges,
+                }, function(err, newDoc) {
+                    if(err) {
+                        console.log("Error inserting." + err);
                     }
-                    json = JSON.stringify(result);
-                    console.log(json);
                 });
-            });
+            }
         });
-        
-        
-        console.log("File " + source + "was successfully read.\n");
-        return json;
-    }
-}();
+    }));
+    
+    /*res.on('end', function(){
+        exchangeRatesDB.find({}, function(err, docs) {
+            if(err) {
+                console.log("Error getting entry.", err);
+            }
+        console.log(JSON.stringify(docs,null,2));
+        });
+    })*/
+};
+
+var req = http.request(XMLPath, callback).end();
 
 var server = app.listen(port, host, function() {
     console.log('Server is started.');
