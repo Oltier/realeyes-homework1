@@ -19,6 +19,16 @@ hbs.registerHelper('block', function(name) {
     return val;
 })
 
+hbs.registerHelper('list', function(items, options){
+    var out = "";
+    
+    for(var i = 0; i < items.length; i++) {
+        out += '<option value="' + options.fn(items[i]) + '">' + options.fn(items[i]) + '</option>';
+    }
+    
+    return out;
+})
+
 
 var app = express();
 
@@ -37,7 +47,7 @@ app.use(flash());
 
 
 var exchangeController = require("./controllers/exchange");
-//app.use('/', exchangeController);
+app.use('/', exchangeController);
 
 var port = process.env.PORT;
 var host = process.env.IP;
@@ -57,36 +67,6 @@ app.exchangeRatesDB = new Datastore({
     inMemoryOnly: true
 });
 var XMLPath = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
-
-app.get('/', function(req, res){
-    res.render('index');
-});
-
-app.post('/', function(req, res){
-   var value = req.body.value;
-   var from = req.body.fromCurrency;
-   var to = req.body.toCurrency;
-   var rate = 0;
-   app.exchangeRatesDB.find({date: "2017-01-27", currency: from === "EUR" ? to : from}, function(err, docs) {
-        if(err) {
-            console.log("Error getting entry.", err);
-        }
-        
-        /*if(from === "EUR") {
-            var l = false;
-            for(var i = 0; i < docs.exchangeRates.length && !l; i++) {
-                if(docs.exchangeRates[i].currency === to) {
-                    rate = docs.exchangeRates[i].rate;
-                    l = true;
-                }
-            }
-        }*/
-        
-        console.log(JSON.stringify(docs,null,2));
-        rate = docs[0].rate;
-    });
-    res.json(from === "EUR" ? value * rate : value / rate);
-});
 
 var RequestPromise = require('request-promise');
 RequestPromise(XMLPath)

@@ -12,10 +12,18 @@ $("form").on('submit', function(e){
         cache: false,
         data: values,
         success: function(data) {
-            console.log(data)
+            $('#result').html(values['value'] + " " + values['fromCurrency'] + " = " + data + " " +values['toCurrency']);
         },
-        error: function(jqXHR, textStatus, err) {
-            console.log('Text status: ' + textStatus + ', err: ' + err)
+        error: function(jqXHR, textStatus, error) {
+            $('#result').html(jqXHR.responseText);
         }
     })
 })
+
+$("#swap").click(function(e){
+    var fromCurrency = $('#fromCurrency option:selected').val();
+    var toCurrency = $('#toCurrency option:selected').val();
+    
+    $('#toCurrency option[value='+fromCurrency+']').prop('selected', true);
+    $('#fromCurrency option[value='+toCurrency+']').prop('selected', true);
+});

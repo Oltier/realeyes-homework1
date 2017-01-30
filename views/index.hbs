@@ -10,25 +10,30 @@
     <div class="form-group">
         <div class="col-lg-10">
             <label class="sr-only" for="value">Value</label>
-            <input class="form-control" id="value" name="value" type="number" value="{{data.value}}">
+            <input class="form-control" id="value" name="value" type="number" step="any" min="0" required>
         </div>
     </div>
     <div class="form-group">
         <label class="sr-only" for="fromCurrency">Currency to change from</label>
-        <select class="form-control" id="fromCurrency" name="fromCurrency">
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
+        <select class="form-control" id="fromCurrency" name="fromCurrency" required>
+            <option value="EUR" selected>EUR</option>
+            {{#each docs}}
+                <option value="{{currency}}">{{currency}}</option>
+            {{/each}}
         </select>
     </div>
-    <span class="glyphicon glyphicon-transfer"></span>
+    <span class="glyphicon glyphicon-transfer" id="swap"></span>
     <div class="form-group">
         <label class="sr-only" for="toCurrency">Currency to change to</label>
-        <select class="form-control" id="toCurrency" name="toCurrency">
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
+        <select class="form-control" id="toCurrency" name="toCurrency" required>
+            <option value="EUR" selected>EUR</option>
+            {{#each docs}}
+                <option value="{{currency}}">{{currency}}</option>
+            {{/each}}
         </select>
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Exchange</button>
     </div>
+    <p class="col-lg-10" id="result"></p>
 </form>
