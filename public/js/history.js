@@ -47,17 +47,33 @@ $(document).ready(function(data){
         for(var i = 0; i < graph.series.length; i++) {
             graph.series[i].disable();
         }
+        graph.update();
         
         var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
             graph: graph,
             legend: legend
         });
         
-        var axes = new Rickshaw.Graph.Axis.Time({
-            graph: graph
+        
+        var time = new Rickshaw.Fixtures.Time();
+        var weeks = time.unit('week');
+        
+        var xAxis = new Rickshaw.Graph.Axis.Time({
+            graph: graph,
+            timeUnit: weeks
         });
         
-        axes.render();
+        var yAxis = new Rickshaw.Graph.Axis.Y({
+            graph: graph,
+        });
+        
+        var slider = new Rickshaw.Graph.RangeSlider({
+            graph: graph,
+            element: document.querySelector('#slider'),
+        })
+        
+        yAxis.render();
+        xAxis.render();
         graph.render();
     
         function componentToHex(c) {
