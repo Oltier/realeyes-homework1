@@ -3,7 +3,7 @@ var express = require("express");
 var router = express.Router();
 
 router.get('/', function(req, res){
-    req.app.exchangeRatesDB.find({}).sort({date: -1, currency: 1}).limit(31).exec(function(err, docs){
+    req.app.exchangeRatesDB.find({}, {_id: 0}).sort({date: -1, currency: 1}).limit(31).exec(function(err, docs){
         if(err) throw err;
         res.render('index', {
             docs: docs
@@ -49,14 +49,19 @@ router.post('/', function(req, res){
 });
 
 router.get('/history', function(req, res){
-    res.render('history');
+    req.app.exchangeRatesDB.find({}, {_id: 0}).sort({date: -1, currency: 1}).limit(31).exec(function(err, docs){
+        if(err) throw err;
+        res.render('history', {
+            docs: docs
+        });
+    });
 });
 
 router.get('/history/getdata', function(req, res){
-    req.app.exchangeRatesDB.find({}).sort({currency: 1, date: 1}).exec(function(err, docs){
+    req.app.exchangeRatesDB.find({}, {_id: 0}).sort({currency: -1, date: 1}).exec(function(err, docs){
         if(err) throw err;
         res.json(docs);
     });
-})
+});
 
 module.exports = router;
