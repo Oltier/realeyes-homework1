@@ -48,4 +48,15 @@ router.post('/', function(req, res){
     
 });
 
+router.get('/history', function(req, res){
+    res.render('history');
+});
+
+router.get('/history/getdata', function(req, res){
+    req.app.exchangeRatesDB.find({}).sort({currency: 1, date: 1}).exec(function(err, docs){
+        if(err) throw err;
+        res.json(docs);
+    });
+})
+
 module.exports = router;

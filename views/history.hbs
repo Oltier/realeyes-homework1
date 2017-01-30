@@ -1,0 +1,21 @@
+{{#extend "scripts"}}
+<script src="/js/history.js"></script>
+<script src="/js/d3.min.js"></script>
+<script src="/js/rickshaw.min.js"></script>
+{{/extend}}
+
+{{#extend "stylesheets"}}
+<link type="text/css" rel="stylesheet" href="/css/graph.css">
+<link type="text/css" rel="stylesheet" href="/css/detail.css">
+<link type="text/css" rel="stylesheet" href="/css/legend.css">
+<link type="text/css" rel="stylesheet" href="/css/lines.css">
+{{/extend}}
+
+<div class="page-header">
+    <h1>Currency history</h1>
+</div>
+
+<div id="chart_container">
+    <div id="chart" class="rickshaw_graph"></div>
+    <div id="legend"></div>
+</div>

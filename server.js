@@ -19,16 +19,6 @@ hbs.registerHelper('block', function(name) {
     return val;
 })
 
-hbs.registerHelper('list', function(items, options){
-    var out = "";
-    
-    for(var i = 0; i < items.length; i++) {
-        out += '<option value="' + options.fn(items[i]) + '">' + options.fn(items[i]) + '</option>';
-    }
-    
-    return out;
-})
-
 
 var app = express();
 
