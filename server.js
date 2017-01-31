@@ -1,7 +1,5 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-var expressValidator = require("express-validator");
-var flash = require("connect-flash");
 
 var hbs = require("hbs");
 var blocks = {}
@@ -31,9 +29,6 @@ app.set("view engine", "hbs");
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(expressValidator());
-
-app.use(flash());
 
 
 var exchangeController = require("./controllers/exchange");

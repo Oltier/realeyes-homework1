@@ -16,9 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "bootstrap-validator": "^0.11.9",
-    "handlebars": "^4.0.5",
-    "jquery-ui": "^1.12.1"
+    "bootstrap": "^3.3.7"
   }
 }
