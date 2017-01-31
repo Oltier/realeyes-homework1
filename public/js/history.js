@@ -1,4 +1,4 @@
-$(document).ready(function(data){
+$(document).ready(function(){
     
     $.get("/history/getdata", function(data){
         var chartData = [];
@@ -20,7 +20,7 @@ $(document).ready(function(data){
         
         var graph = new Rickshaw.Graph({
                 element: document.getElementById('chart'),
-                width: 960,
+                width: 896,
                 height: 500,
                 renderer: 'line',
                 series: chartData,
@@ -47,10 +47,6 @@ $(document).ready(function(data){
             graph: graph,
             legend: legend
         });
-        
-        for(var i = 0; i < graph.series.length; i++) {
-            if(graph.series[i].name !== "HUF") graph.series[i].disable();
-        }
         
         var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
             graph: graph,

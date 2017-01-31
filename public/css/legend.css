@@ -1,13 +1,31 @@
-.rickshaw_legend {
-	font-family: Arial;
-	font-size: 12px;
-	color: white;
-	background: #404040;
-	display: inline-block;
-	padding: 12px 5px; 
-	border-radius: 2px;
-	position: relative;
+@media only screen and (min-width: 1024px) {
+	.rickshaw_legend {
+		font-family: Arial;
+		font-size: 12px;
+		color: white;
+		background: #404040;
+		display: inline-block;
+		padding: 12px 5px; 
+		border-radius: 2px;
+		position: relative;
+	}
 }
+
+@media only screen and (max-width: 1023px) {
+	.rickshaw_legend {
+		font-family: Arial;
+		font-size: 12px;
+		color: white;
+		background: #404040;
+		display: inline-block;
+		padding: 12px 5px; 
+		border-radius: 2px;
+		position: relative;
+		max-width: 896px;
+		width: 100%;
+	}
+}
+
 .rickshaw_legend:hover {
 	z-index: 10;
 }
@@ -16,11 +34,24 @@
 	height: 10px;
 	border: 1px solid rgba(0, 0, 0, 0.2);
 }
-.rickshaw_legend .line {
-	clear: both;
-	line-height: 140%;
-	padding-right: 15px;
+
+@media only screen and (min-width: 1024px) {
+	.rickshaw_legend .line {
+		clear: both;
+		line-height: 140%;
+		padding-right: 15px;
+	}
 }
+
+@media only screen and (max-width: 1023px) {
+	.rickshaw_legend .line {
+		clear: both;
+		line-height: 140%;
+		padding-right: 15px;
+		display: inline-block;
+	}
+}
+
 .rickshaw_legend .line .swatch {
 	display: inline-block;
 	margin-right: 3px;
@@ -39,15 +70,28 @@
 	text-shadow: none;
 }
 .rickshaw_legend .action:hover {
-	opacity: 0.6;
+	opacity: 1;
+	color: inherit;
 }
 .rickshaw_legend .action {
 	margin-right: 0.2em;
 	font-size: 10px;
-	opacity: 0.2;
+	opacity: 1;
 	cursor: pointer;
 	font-size: 14px;
+	color: inherit;
 }
+
+.rickshaw_legend .line.disabled .action {
+	opacity: 0.4;
+	color: inherit;
+}
+
+.rickshaw_legend .line.disabled .action:hover {
+	opacity: 1;
+	color: inherit;
+}
+
 .rickshaw_legend .line.disabled {
 	opacity: 0.4;
 }
