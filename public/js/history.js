@@ -20,14 +20,13 @@ $(document).ready(function(){
         
         var graph = new Rickshaw.Graph({
                 element: document.getElementById('chart'),
-                width: window.innerWidth >= 1024 ? window.innerWidth - 150 : window.innerWidth - 35,
-                height: 500,
                 renderer: 'line',
+                width: (window.innerWidth < 1024 || window.innerHeight < 914) ? window.innerWidth - 35 : window.innerWidth - 150,
+                height: window.outerHeight * 0.50,
                 series: chartData,
                 min: 'auto',
                 stack: false
             });
-        
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
             graph: graph,
             xFormatter: function(x) {
@@ -67,7 +66,8 @@ $(document).ready(function(){
             graph: graph,
             tickFormat: function(val) {
                 return val === null ? val : Math.round((parseFloat(val) + 0.0000001) * 10000) / 10000;
-            }
+            },
+            tickSize: 1,
         });
         
         
@@ -80,21 +80,31 @@ $(document).ready(function(){
             element: document.getElementById('slider'),
         })
         
-        var resize = function() {
-            graph.configure({
-                width: window.innerWidth >= 1024 ? window.innerWidth - 150 : window.innerWidth - 35,
-            })
+        var resize = function(e) {
+            if(/Mobi/.test(navigator.userAgent)){
+                graph.configure({
+                    width: (window.innerWidth < 1024 || window.innerHeight < 914) ? window.innerWidth - 35 : window.innerWidth - 150,
+                })
+            } else {
+                graph.configure({
+                    width: (window.innerWidth < 1024 || window.innerHeight < 914) ? window.innerWidth - 35 : window.innerWidth - 150,
+                    height: window.outerHeight * 0.50,
+                })   
+            }
             graph.render();
         }
-        window.addEventListener('resize', resize);
+        
+        var orientation = function(e) {
+            graph.configure({
+                width: (window.screen.width < 1024 || window.screen.width < 914) ? window.screen.width - 35 : window.screen.width - 150,
+                height: window.screen.height * 0.50,
+            })
+            graph.render();
+            
+        }
+        
+        $(window).on('orientationchange', orientation);
+        $(window).on('resize', resize);
     });
     
 });
-
-
-
-
-
-
-
-//CHANGE TO AJAX!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
