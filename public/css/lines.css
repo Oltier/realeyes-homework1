@@ -7,7 +7,6 @@ div, span, p, td {
 #legend {
 	display: inline-block;
 	position: relative;
-	left: 8px;
 }
 #legend_container {
 	position: absolute;

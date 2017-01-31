@@ -2,7 +2,6 @@
 <script src="/js/history.js"></script>
 <script src="/js/d3.v2.js"></script>
 <script src="/js/rickshaw.min.js"></script>
-<script src="/js/jquery-ui.min.js"></script>
 {{/extend}}
 
 {{#extend "stylesheets"}}
@@ -20,9 +19,6 @@
 <div id="chart_container">
     <div id="chart" class="rickshaw_graph"></div>
     <div id="legend"></div>
-    <div id="slider" style="margin-top: 5px;" class="ui-slider ui-slider-horizonal ui-widget ui-widget-content ui-corner-all">
-        <div class="ui-slider-range ui-widget-header" style="left: 0%; width: 100%"></div>
-        <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%"></a>
-        <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 100%"></a>
+    <div id="slider"></div>
     </div>
 </div>

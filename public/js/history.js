@@ -24,7 +24,8 @@ $(document).ready(function(){
                 height: 500,
                 renderer: 'line',
                 series: chartData,
-                min: 'auto'
+                min: 'auto',
+                stack: false
             });
         
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
@@ -69,13 +70,12 @@ $(document).ready(function(){
             }
         });
         
-        $("#slider").width(window.innerWidth >= 1024 ? window.innerWidth - 150 : window.innerWidth - 35);
         
         yAxis.render();
         xAxis.render();
         graph.render();
         
-        var slider = new Rickshaw.Graph.RangeSlider({
+        var slider = new Rickshaw.Graph.RangeSlider.Preview({
             graph: graph,
             element: document.getElementById('slider'),
         })
@@ -85,25 +85,16 @@ $(document).ready(function(){
                 width: window.innerWidth >= 1024 ? window.innerWidth - 150 : window.innerWidth - 35,
             })
             graph.render();
-            $("#slider").width(window.innerWidth >= 1024 ? window.innerWidth - 150 : window.innerWidth - 35);
         }
         window.addEventListener('resize', resize);
-        
     });
     
 });
 
-/*$(window).on('resize', function(){
-            console.log(graph);
-            if(window.innerWidth >= 1024) {
-                $("#slider").width(window.innerWidth - 150);
-            } else {
-                $("#slider").width(window.innerWidth - 35);
-            }
-            
-            graph.configure({
-                width: window.innerWidth - 20,
-                height: window.innerHeight - 20
-            });
-            //graph.render();
-        });*/
+
+
+
+
+
+
+//CHANGE TO AJAX!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

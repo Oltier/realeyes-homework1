@@ -8,6 +8,7 @@
 		padding: 12px 5px; 
 		border-radius: 2px;
 		position: relative;
+		left: 8px;
 	}
 }
 
@@ -21,7 +22,7 @@
 		padding: 12px 5px; 
 		border-radius: 2px;
 		position: relative;
-		max-width: 896px;
+		max-width: 988px;
 		width: 100%;
 	}
 }
