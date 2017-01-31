@@ -3,16 +3,12 @@ $(document).ready(function(data){
     $.get("/history/getdata", function(data){
         var chartData = [];
         var unixDate = new Date(data[0].date).getTime() / 1000;
-        var seriesValues = [{x: unixDate, y: parseFloat(data[0].rate)}];
+        var seriesValues = [];
         var currencyName = data[0].currency;
-        var goldenRationConjugate = 0.618033988749895;
-        var h = Math.random();
+        var palette = new Rickshaw.Color.Palette({scheme: 'munin'});
         for(var i = 0; i < data.length; i++) {
             if(currencyName !== data[i].currency){
-                h += goldenRationConjugate;
-                h %= 1;
-                var randomColor = rgbToHex(hsvToRgb(h, 0.5, 0.95));
-                var seriesData = {color: randomColor, name: currencyName, data: seriesValues};
+                var seriesData = {color: palette.color(), name: currencyName, data: seriesValues};
                 chartData.push(seriesData);
                 seriesValues = [];
                 currencyName = data[i].currency;
@@ -28,10 +24,18 @@ $(document).ready(function(data){
                 height: 500,
                 renderer: 'line',
                 series: chartData,
+                min: 'auto'
             });
         
         var hoverDetail = new Rickshaw.Graph.HoverDetail({
-            graph: graph
+            graph: graph,
+            xFormatter: function(x) {
+                var dateInt = new Date(x*1000);
+                return dateInt.toUTCString().replace(' 00:00:00 GMT', '');
+            },
+            yFormatter: function(y) {
+                return y === null ? y : y.toFixed(5);
+            }
         });
         
         var legend = new Rickshaw.Graph.Legend({
@@ -45,9 +49,8 @@ $(document).ready(function(data){
         });
         
         for(var i = 0; i < graph.series.length; i++) {
-            graph.series[i].disable();
+            if(graph.series[i].name !== "HUF") graph.series[i].disable();
         }
-        graph.update();
         
         var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
             graph: graph,
@@ -65,55 +68,20 @@ $(document).ready(function(data){
         
         var yAxis = new Rickshaw.Graph.Axis.Y({
             graph: graph,
+            tickFormat: Rickshaw.Fixtures.Number.formatKMBT
         });
         
-        var slider = new Rickshaw.Graph.RangeSlider({
-            graph: graph,
-            element: document.querySelector('#slider'),
-        })
+
+
         
         yAxis.render();
         xAxis.render();
         graph.render();
-    
-        function componentToHex(c) {
-            var hex = c.toString(16);
-            return hex.length == 1 ? "0" + hex : hex;
-        }
-
-        function rgbToHex(rbg) {
-            return "#" + componentToHex(rbg[0]) + componentToHex(rbg[1]) + componentToHex(rbg[2]);
-        }
-    
-        function hsvToRgb(h, s, v) {
-            var hueInt = parseInt(h*6);
-            var f = h*6-hueInt;
-            var p = v * (1-s);
-            var q = v*(1-f*s);
-            var t = v*(1-(1-f)*s);
-            var r, g, b;
-            switch(hueInt) {
-                case 0:
-                    r=v; g=t; b=p;
-                    break;
-                case 1:
-                    r=q; g=v; b=p;
-                    break;
-                case 2:
-                    r=p; g=v; b=t;
-                    break;
-                case 3:
-                    r=p; g=q; b=v;
-                    break;
-                case 4:
-                    r=t; g=p; b=v;
-                    break;
-                case 5:
-                    r=v; g=p; b=q;
-                    break;
-            }
-            return [parseInt(r*256), parseInt(g*256), parseInt(b*256)];
-        }
+        
+                                var slider = new Rickshaw.Graph.RangeSlider({
+            graph: graph,
+            element: document.getElementById('slider'),
+        })
         
     });
     
