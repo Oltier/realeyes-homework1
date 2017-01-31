@@ -34,7 +34,7 @@ $(document).ready(function(){
                 return dateInt.toUTCString().replace(' 00:00:00 GMT', '');
             },
             yFormatter: function(y) {
-                return y === null ? y : y.toFixed(5);
+                return y === null ? y : Math.round((parseFloat(y) + 0.0000001) * 10000) / 10000;
             }
         });
         
@@ -64,17 +64,16 @@ $(document).ready(function(){
         
         var yAxis = new Rickshaw.Graph.Axis.Y({
             graph: graph,
-            tickFormat: Rickshaw.Fixtures.Number.formatKMBT
+            tickFormat: function(val) {
+                return val === null ? val : Math.round((parseFloat(val) + 0.0000001) * 10000) / 10000;
+            }
         });
-        
-
-
         
         yAxis.render();
         xAxis.render();
         graph.render();
         
-                                var slider = new Rickshaw.Graph.RangeSlider({
+        var slider = new Rickshaw.Graph.RangeSlider({
             graph: graph,
             element: document.getElementById('slider'),
         })
