@@ -53,28 +53,31 @@ app.exchangeRatesDB = new Datastore({
 });
 var XMLPath = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
 
-app.getDataBase = function() {
+app.getDataBase = function(lastUpdate) {
     var RequestPromise = require('request-promise');
     RequestPromise(XMLPath)
     .then(function(data){
-        
        var filteredStr = data.slice(data.indexOf("<Cube>"), data.indexOf("</gesmes:Envelope"));
        parser.parseString(filteredStr, function(err, result) {
            if (err) {
                console.log("Error while parsing.", err);
            }
-           for(var i = 0; i < result.Cube.Cube.length; i++) {
-               var date = result.Cube.Cube[i]['$']['time'];
-               for(var j = 0; j < result.Cube.Cube[i].Cube.length; j++) {
-                   var exchangeRate = result.Cube.Cube[i].Cube[j]['$'];
-                   app.exchangeRatesDB.insert({
-                       date: date,
-                       rate: exchangeRate.rate,
-                       currency: exchangeRate.currency
-                   }, function(err, doc) {
-                       if(err) console.log("Error inserting: " + err);
-                   });
-               }
+           
+           if(lastUpdate !== result.Cube.Cube[0]['$']['time']){
+               for(var i = 0; i < result.Cube.Cube.length; i++) {
+                   var date = result.Cube.Cube[i]['$']['time'];
+                   if(date === lastUpdate) {return;}
+                   for(var j = 0; j < result.Cube.Cube[i].Cube.length; j++) {
+                       var exchangeRate = result.Cube.Cube[i].Cube[j]['$'];
+                       app.exchangeRatesDB.insert({
+                           date: date,
+                           rate: exchangeRate.rate,
+                           currency: exchangeRate.currency
+                       }, function(err, doc) {
+                           if(err) console.log("Error inserting: " + err);
+                       });
+                   }
+               }   
            }
        });
     });

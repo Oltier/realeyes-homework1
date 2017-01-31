@@ -20,7 +20,7 @@ $("form").on('submit', function(e){
                 + values['toCurrency']);
             
             if(data.date !== undefined) {
-                $('#date').html("Exchange rate updated on: " + data.date + ".")                
+                $('#date').html("Exchange rate last updated on: " + data.date + ".")                
             }
 
         },

@@ -5,11 +5,15 @@ var router = express.Router();
 router.get('/', function(req, res){
     req.app.exchangeRatesDB.find({}, {_id: 0, rate: 0}).sort({date: -1, currency: 1}).limit(31).exec(function(err, docs){
         if(err) throw err;
-        console.log(docs);
         res.render('index', {
             docs: docs
         });
         
+        var _date = new Date();
+        var today = _date.getToday();
+        if(docs[0].date !== today) {
+            req.app.getDataBase(docs[0].date);
+        }
         
     });
 });
@@ -63,8 +67,21 @@ router.get('/history', function(req, res){
 router.get('/history/getdata', function(req, res){
     req.app.exchangeRatesDB.find({}, {_id: 0}).sort({currency: -1, date: 1}).exec(function(err, docs){
         if(err) throw err;
+        var _date = new Date();
+        var today = _date.getToday();
+        if(docs[docs.length-1].date !== today) {
+            req.app.getDataBase(docs[docs.length-1].date);
+        }
         res.json(docs);
     });
 });
+
+
+Date.prototype.getToday = function() {
+    var mm = this.getMonth() + 1;
+    var dd = this.getDate();
+    
+    return [this.getFullYear(), (mm > 9 ? '' : '0') + mm, (dd>9 ? '' : '0') + dd].join('-');
+}
 
 module.exports = router;
