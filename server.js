@@ -53,8 +53,9 @@ app.exchangeRatesDB = new Datastore({
 });
 var XMLPath = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
 
-var RequestPromise = require('request-promise');
-RequestPromise(XMLPath)
+app.getDataBase = function() {
+    var RequestPromise = require('request-promise');
+    RequestPromise(XMLPath)
     .then(function(data){
         
        var filteredStr = data.slice(data.indexOf("<Cube>"), data.indexOf("</gesmes:Envelope"));
@@ -77,6 +78,9 @@ RequestPromise(XMLPath)
            }
        });
     });
+}
+
+app.getDataBase();
 
 var server = app.listen(port, host, function() {
     app.models = 

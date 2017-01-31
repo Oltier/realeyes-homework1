@@ -12,7 +12,17 @@ $("form").on('submit', function(e){
         cache: false,
         data: values,
         success: function(data) {
-            $('#result').html(values['value'] + " " + values['fromCurrency'] + " = " + Math.round((parseFloat(data) + 0.0000001) * 10000) / 10000 + " " +values['toCurrency']);
+            $('#result').html(values['value'] 
+                + " " 
+                + values['fromCurrency']
+                + " = " + Math.round((parseFloat(data.value) + 0.0000001) * 10000) / 10000 
+                + " " 
+                + values['toCurrency']);
+            
+            if(data.date !== undefined) {
+                $('#date').html("Exchange rate updated on: " + data.date + ".")                
+            }
+
         },
         error: function(jqXHR, textStatus, error) {
             $('#result').html(jqXHR.responseText);
