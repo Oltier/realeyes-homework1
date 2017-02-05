@@ -10,11 +10,11 @@ By clicking selecting the *Exchange rate history* you can see the exchange rates
 ## Installation
 1. Download the project from GitHub by clicking Clone or download button.
   1. You can either copy the web URL to local GIT and copy the repository OR
-  2. Click the Download ZIP button and the repository will be downloaded.
+  2. Click the Download ZIP button and the repository will be downloaded to your computer.
 2. Extract the repository.
 3. Open the folder. You should see server.js, package.json among several other files and folders.
 4. Shift+Right click in the folder and select *Open command window here*.
-5. In the command window type the following, assuming you already have Node installed (if you haven't, you can download and isntall it from [the Node.js project website](https://nodejs.org/en/)):
+5. In the command window type the following, assuming you already have Node installed (if you haven't, you can download and install it from [the Node.js project website](https://nodejs.org/en/)):
 `npm install`
 6. The required packages for the application will be downloaded now. If you encounter any errors, try running the command line as an administrator.
 
