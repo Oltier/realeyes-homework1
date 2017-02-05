@@ -34,9 +34,6 @@ app.use(bodyParser.urlencoded({
 var exchangeController = require("./controllers/exchange");
 app.use('/', exchangeController);
 
-var port = process.env.PORT;
-var host = process.env.IP;
-
 var xml2js = require('xml2js');
 
 var parser = new xml2js.Parser();
@@ -84,6 +81,9 @@ app.getDataBase = function(lastUpdate) {
 }
 
 app.getDataBase();
+
+var port = 3000;
+var host = 'localhost';
 
 var server = app.listen(port, host, function() {
     app.models = 
