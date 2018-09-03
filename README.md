@@ -1,5 +1,5 @@
 ![Simple exchange logo](public/ic_euro_symbol_white_48dp_1x.png)
-# Realeyes homework (Money exchange)
+# Simple exchange
 This project was created as a homework for Realeyes.
 
 The project includes exchange between two currencies based on the current exchange rates of the European Central Bank.
